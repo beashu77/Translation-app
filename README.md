@@ -3,7 +3,8 @@
 
 Translation-app was a mini project in which user able translate in different languages. 
 
-![Github-profile-theme](https://user-images.githubusercontent.com/101581634/189510365-5196a24d-606a-4274-9d8a-98f832a04a22.png)
+![Translation-app](![Tra](https://user-images.githubusercontent.com/101581634/189512448-1dc9ec4e-076f-4248-84ae-e607728f79d2.png)
+)
 
 ## Demo
 
