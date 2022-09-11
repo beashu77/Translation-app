@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/b0071033d8.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="https://tse2.mm.bing.net/th?id=OIP.QdLOjoqXiyQkisRK8jIvZQHaHa&pid=Api&P=0">
+    <title> Translation App</title>
+    <style>
+        *{
+          font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        
+        }
+        body{
+            /* background-image: url("https://www.clipartkey.com/mpngs/m/97-973383_expressive-language-disorder-cartoon.png"); */
+            background-image: url("https://www.clipartkey.com/mpngs/m/97-973383_expressive-language-disorder-cartoon.png");
+            background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+         
+        }
+      
+        #container{
+            display: flex;
+            width: 80%;
+            margin: auto;
+            height: 300px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            border-radius: 10px;
+            background-color: white;
+            
+        }
+        #input,#output{
+            flex:1;
+            /* margin: 5%; */
+            height: 300px;
+            /* border: 1px solid black; */
+            width: 50%;
+            margin-top: 10px;
+        }
+        #input{
+            border-right: 1px solid #e4e4e4;
+        }
+        #input-text, #output-text{
+        
+            height: 70%;
+            width: 80%;
+            font-size: 30px;
+            padding: 10px;
+        }
+        #input-text{
+            border: none;
+            height: 50%;
+        }
+        #inp_lang,#out_lang{
+           padding: 0.2rem;
+
+        }
+        #Navbar{
+        
+            height:60px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color:#fafafa;
+         
+        }
+        #img{
+            height:100%;
+            width: 150px;
+        }
+        #NavbarRight{
+            display: flex;
+            flex-direction: row;
+           
+   
+        }
+        #NavbarRight>div>h3{
+            color: #87746f;
+            font-size: 30px;
+            margin-top: 20px;
+            
+        }
+     
+        #LeftTop,#OutTop{
+        
+            border-bottom: 1px solid #e4e4e4;
+            padding: 1rem;
+        }
+        /* #output-text{
+            border:1px solid 
+        }
+         */
+
+         #bottom {
+            display: flex;
+            flex-direction: row;
+         
+   margin-top: 100px;
+   gap:20px;
+   margin-left: 40%;
+
+         }
+         #bottom >div{
+            border: 1px solid #e4e4e4;
+            padding: 1.5rem;
+            border-radius: 50%;
+            background-color: white;
+         }
+         #bottom >div>a>i{
+              font-size: 30px;
+              color: 
+#757575;
+         }
+        </style>
+</head>
+<body>
+
+
+    <div id="Navbar">
+        <div id="NavbarRight">
+            <div>
+                <img id="img" src="https://g-design.storage.googleapis.com/production/v6/assets/g-share.gif" />
+            </div>
+            <div><h3>Translate</h3></div>
+        </div>
+        <div id="NavbarLeft"></div>
+    </div>
+    <div id="container">
+        <div id="input">
+           <div id="LeftTop">
+            Choose Language
+            <select name="inp_lang" id="inp_lang">
+                <option value="en">English </option>
+                <option value="hi"> Hindi</option>
+                <option value="ko"> Korean</option>
+                <option value="ja"> Japenese</option>
+                <option value="fr"> French</option>
+                
+
+
+            </select>
+       
+           </div>
+            
+            <textarea placeholder="Enter Here..." oninput="debounce(Translate,1000)" name="input-text" id="input-text"></textarea>
+        </div>
+        <div id="output">
+            <div id="OutTop">
+                Choose Language
+                <select name="out_lang" id="out_lang">
+                <option value="en">English </option>
+                <option value="hi">Hindi </option>
+                <option value="ko"> Korean</option>
+                <option value="ja"> Japenese</option>
+                <option value="fr"> French</option>
+                
+                </select>
+              
+            </div>
+            <div id="output-text"><p id="output_value"></p></div>
+            
+            
+        </div>
+
+        <!-- <div class="words" contenteditable>
+            <p id="p"></p>
+          </div>
+          <button id="btn">Voice Start</button>
+          <button id="btn2">Voice Stop</button> -->
+     
+    </div>
+
+    <p style="text-align: center;">First select Language you want and then type...</p>
+    <div id="bottom">
+        <div><a href="https://translate.google.com/history"><i class="fa-solid fa-clock-rotate-left"></i></a></div>
+        <div><a href="https://translate.google.com/saved"><i class="fa-solid fa-star"></i></a></div>
+        <div><a href="https://translate.google.com/contribute"><i class="fa-solid fa-user-group"></i></a></div>
+    </div>
+    
+  
+</body>
+</html>
+<script>
+       let id;
+     function read (id1){
+        return document.getElementById(id1).value;
+     }
+
+    async function Translate(){
+        document.querySelector("#input-text").innerHTML=null;
+        document.querySelector("#output_value").innerText=null;
+
+
+        //1.text to translate 
+    try{
+        const input = read("input-text");
+        console.log(input);
+
+        const input_lang = read('inp_lang')
+        console.log(input_lang);
+
+        const out_lang = read('out_lang')
+        console.log(out_lang);
+         
+        const res=await fetch("https://libretranslate.de/translate",{
+            method:'POST',
+
+            body:JSON.stringify({
+                q:input,
+                source:input_lang,
+                target:out_lang, 
+                format:"text",
+
+            }),
+            //additional information about our request that server might need to know
+
+            headers:{
+                "content-Type":'application/json',
+            },
+        });
+
+        const {translatedText} = await res.json();
+         document.getElementById('output_value').innerText=translatedText;
+        //console.log("data:",data)
+    }catch(err){
+        console.log("err:",err)
+    }
+}
+
+function debounce(func,delay){
+    if(id)
+    {
+        clearInterval(id);
+    }
+    id=setTimeout(function(){
+        func();
+    },delay);
+}
+
+   
+
+///*********************************Voice*******
+// var speech = false;
+//       window.SpeechRecognition =
+//         window.SpeechRecognition || window.webkitSpeechRecognition;
+
+//       const recognition = new SpeechRecognition();
+//       recognition.interimResults = true;
+//       const words = document.querySelector(".words");
+//       words.appendChild(p);
+
+//       recognition.addEventListener("result", (e) => {
+//         const transcript = Array.from(e.results)
+//           .map((result) => result[0])
+//           .map((result) => result.transcript)
+//           .join("");
+
+//         document.getElementById("input-text").innerHTML = transcript;
+//         console.log(transcript);
+//       });
+
+//       console.log(speech);
+//       document.getElementById("btn").addEventListener("click", (e) => {
+//         speech = true;
+//         if (speech == true) {
+//           recognition.start();
+//           recognition.addEventListener("end", recognition.start);
+          
+//         }
+//         console.log(speech);
+//       });
+
+
+//       document.getElementById("btn2").addEventListener("click", (e) => {
+//         speech = false;
+//         if (speech == false) {
+//             recognition.stop();
+//         recognition.addEventListener("end", recognition.stop);
+//         recognition.interimResults = false;
+//         console.log(out_lang);
+//         }
+    
+//       });
+
+
+      //*******************************************************
+   
+
+</script>
